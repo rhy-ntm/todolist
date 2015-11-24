@@ -1,5 +1,11 @@
 <h1>Listing tasks</h1>
 
+<%= form_tag({:action=>"search"},{:method=>"GET"}) do %>
+  <%= text_field_tag 'search[name]', @name %>
+  <%= submit_tag "検索" %>
+  <%= link_to "リセット", tasks_path %>
+<% end %>
+
 <table>
   <thead>
     <tr>
@@ -17,7 +23,7 @@
       <tr>
         <td><%= task.done %></td>
         <td><%= task.due_date %></td>
-        <td><%= task.user.username %></td>
+        <td><%= task.name %></td>
         <td><%= task.category.categoryname %></td>
         <td><%= task.user.username %></td>
         <td><%= link_to 'Show', task %></td>
