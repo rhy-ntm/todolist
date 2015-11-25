@@ -5,8 +5,6 @@ class TasksController < ApplicationController
   # GET /tasks.json
   def index
     @tasks = Task.all
-    @filter = get_filter
-    @name = @filter[:name]
   end
 
   # GET /tasks/1
@@ -64,7 +62,16 @@ class TasksController < ApplicationController
   end
   
   def search
-    @tasks = Task.where(" name LIKE '%#{params['search']['name']}%' ")
+    @search_value = params['search']['name']
+    @search_user = params['search']['user']
+    @search_category = params['search']['category']
+    @tasks = Task.where(" name LIKE '%#{@search_value}%' ")
+    if @search_user.present?
+      @tasks = @tasks.where(user_id: @search_user)
+    end
+    if @search_category.present?
+      @tasks = @tasks.where(category_id: @search_category)
+    end
     render :index
   end
 
@@ -79,18 +86,4 @@ class TasksController < ApplicationController
     params.require(:task).permit(:due_date, :category_id, :name, :done, :user_id)
   end
   
-  #検索フィールドの値をセッションから取得
-  def get_filter
-    local_session["filter"] ||= {}
-  end
-
-  #検索フィールドの値をセッションに設定
-  def set_filter(filter)
-    local_session["filter"]=filter
-  end
-    
-  #このコントローラ内部だけで使うセッションを返す
-  def local_session
-    session[self.class.name] ||= {}
-  end
 end
