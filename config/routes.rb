@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'login/index' => 'login#index'
+  post 'login/auth'
+  resources :login
+
   resources :categories
 
   resources :users
@@ -6,6 +10,8 @@ Rails.application.routes.draw do
   resources :tasks do
     get 'search', on: :collection
   end
+  
+  root 'login#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

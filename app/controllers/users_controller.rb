@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  skip_before_action :check_logined
   before_action :auth
 
   # GET /users
@@ -76,7 +77,7 @@ class UsersController < ApplicationController
   def auth
     name = 'izumo'
     passwd = 'syogyo'
-    authenticate_or_request_with_http_basic('Railbook') do |n,p|
+    authenticate_or_request_with_http_basic('ToDoList') do |n,p|
       n == name && p == passwd
     end
   end
